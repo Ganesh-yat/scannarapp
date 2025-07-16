@@ -34,11 +34,10 @@ const defaultContext: GlobalContextType = {
 const GlobalContext = createContext<GlobalContextType>(defaultContext);
 
 export const GlobalProvider = ({ children }: { children: ReactNode }) => {
-    // Use system theme
+    
     const systemTheme = useColorScheme() as ThemeType || "light";
     const [theme, setTheme] = useState<ThemeType>(systemTheme);
 
-    // (Optional: Keep in sync with device theme changes)
     useEffect(() => {
         setTheme(systemTheme);
     }, [systemTheme]);
@@ -54,7 +53,6 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
     const changeUserType = (type: string | null) => setUserType(type);
     const changeTheme = (newTheme: ThemeType) => setTheme(newTheme);
 
-    // Always provide colors for current theme
     const colors = Colors[theme];
 
     return (

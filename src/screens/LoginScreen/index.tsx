@@ -14,7 +14,7 @@ import {
 import { API_ROUTE } from "../../../config";
 import { useGlobalInfo } from "../../context/GlobalContext";
 
-const LoginScreen: React.FC = ({handleLoginScreen}) => {
+const LoginScreen: React.FC = ({ handleLoginScreen }: any) => {
     const { colors, changeIsLoggedIn, changeUserType, changeUserId } = useGlobalInfo();
     // const navigation = useNavigation();
 
@@ -79,7 +79,7 @@ const LoginScreen: React.FC = ({handleLoginScreen}) => {
 
             const data = await response.json();
 
-            if (response.ok) {  
+            if (response.ok) {
                 const userTypeFromApi = data?.data?.existingUser?.user_type;
 
                 if (userTypeFromApi) {

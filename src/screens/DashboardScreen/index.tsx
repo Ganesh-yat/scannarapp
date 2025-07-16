@@ -53,7 +53,6 @@ const Dashboard: React.FC = () => {
     [qrData?.visitorCount]
   );
 
-  // Handle picking an option
   const handleOptionSelect = (option: string) => {
     setCurrentOption(option);
     setView('scanner');
@@ -61,7 +60,6 @@ const Dashboard: React.FC = () => {
     setScanSessionId(prev => prev + 1);
   };
 
-  // Scanner handler
   const handleScannerDone = (data: any | null) => {
     if (!data) {
       setView('options');
@@ -77,7 +75,6 @@ const Dashboard: React.FC = () => {
     else if (currentOption === 'gift') handleGift(data.qrcode);
   };
 
-  // Reset for next scan (immediately go back to scanner)
   const resetForNextScan = () => {
     setQrData(null);
     setEntryOpen(false);
@@ -90,7 +87,6 @@ const Dashboard: React.FC = () => {
     setScanSessionId(prev => prev + 1);
   };
 
-  // Modal/API submit handlers
   const submitEntry = async () => {
     try {
       const res = await validateEntry(qrData.qrcode, visitorCount);
@@ -164,7 +160,18 @@ const Dashboard: React.FC = () => {
           <Text style={{ fontSize: 16, marginBottom: 4, color: colors.secondaryText }}>
             Scanning for: <Text style={{ fontWeight: 'bold', color: colors.text }}>{currentOption}</Text>
           </Text>
-          <Scanner key={scanSessionId} onDone={handleScannerDone} />
+          {/* <Scanner key={scanSessionId} onDone={handleScannerDone} /> */}
+          <Scanner
+            key={scanSessionId}              // forces remount after each scan
+            onDone={handleScannerDone}
+            colors={{
+              text: colors.text,
+              cancelButton: colors.cancelButton || '#e53935',
+              cancelButtonText: colors.cancelButtonText || '#fff',
+              background: colors.background,
+            }}
+            message={`Scan QR for ${currentOption ?? ''}`}
+          />
         </View>
       )}
 
