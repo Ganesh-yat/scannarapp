@@ -19,6 +19,8 @@ import {
   logExit,
   validateEntry,
 } from '../../utils/Services/api';
+import { Camera } from 'react-native-vision-camera';
+
 
 const Dashboard: React.FC = () => {
   const { theme, colors } = useGlobalInfo();
@@ -35,6 +37,29 @@ const Dashboard: React.FC = () => {
   const [foodOpen, setFoodOpen] = useState(false);
   const [foodUnits, setFoodUnits] = useState('1');
   const [scanSessionId, setScanSessionId] = useState(0);
+
+  React.useEffect(() => {
+  if (view !== 'scanner') return;
+
+  (async () => {
+    try {
+      const perm = await Camera.getCameraPermissionStatus();
+      console.log('[Dashboard] Camera permission status:', perm);
+
+      const allDevices = await Camera.getAvailableCameraDevices();
+      console.log(
+        '[Dashboard] Available camera devices:',
+        allDevices.map(d => ({
+          id: d.id,
+          position: d.position,
+          physicalDevices: d.physicalDevices,
+        })),
+      );
+    } catch (e) {
+      console.warn('[Dashboard] Error querying camera devices:', e);
+    }
+  })();
+}, [view]);
 
   const entryDropdownItems = useMemo(
     () =>
@@ -345,20 +370,3 @@ const styles = StyleSheet.create({
 
 export default Dashboard;
 
-
-// import React from "react";
-// import { View, Text, Button } from "react-native";
-// import { useGlobalInfo } from "../../context/GlobalContext";
-
-// const DashboardScreen: React.FC = () => {
-//   const { colors, changeIsLoggedIn } = useGlobalInfo();
-
-//   return (
-//     <View style={{ flex: 1, backgroundColor: colors.background, justifyContent: "center", alignItems: "center" }}>
-//       <Text style={{ color: colors.text, fontSize: 22 }}>Welcome to Dashboard!</Text>
-//       <Button title="Logout" onPress={() => changeIsLoggedIn(false)} color={colors.button} />
-//     </View>
-//   );
-// };
-
-// export default DashboardScreen;
